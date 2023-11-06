@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { 
-  Router, Routes, Route, Link, useMatch
+  Routes, Route, Link, useMatch
 } from 'react-router-dom'
 
 const Menu = () => {
@@ -28,7 +28,7 @@ const AnecdoteList = ({ anecdotes }) => (
   <div>
     <h2>Anecdotes</h2>
     <ul>
-      {anecdotes.map(anecdote => <li key={anecdote.id} ><Link to={`/anecdote/${anecdote.id}`}>{anecdote.content}</Link></li>)}
+      {anecdotes.map(anecdote => <li key={anecdote.id} ><Link to={`/anecdotes/${anecdote.id}`}>{anecdote.content}</Link></li>)}
     </ul>
   </div>
 )
@@ -104,12 +104,12 @@ const CreateNew = (props) => {
 
 }
 
-const Anecdote = (anecdote) => {
+const Anecdote = ({anecdote}) => {
     return (
       <div>
-        <h3>{anecdote.anecdote.content} by {anecdote.anecdote.author}</h3>
-        <div>has {anecdote.anecdote.votes} votes</div>
-        <div>for more info see <a href={anecdote.anecdote.info}>{anecdote.anecdote.info}</a></div>
+        <h3>{anecdote.content} by {anecdote.author}</h3>
+        <div>has {anecdote.votes} votes</div>
+        <div>for more info see <a href={anecdote.info}>{anecdote.info}</a></div>
       </div>
     )
 }
@@ -134,7 +134,7 @@ const App = () => {
     }
   ])
 
-  const match = useMatch('/anecdote/:id')
+  const match = useMatch('/anecdotes/:id')
   const anecdote = match ? anecdotes.find(anecdote => anecdote.id === Number(match.params.id)) : null
 
   const [notification, setNotification] = useState('')
@@ -157,9 +157,6 @@ const App = () => {
     setAnecdotes(anecdotes.map(a => a.id === id ? voted : a))
   }
 
-  console.log(showNotification,' showNotification ')
-  console.log(notificationMessage, ' notificationMessage ')
-
   return (
     <div>
       <h1>Software anecdotes</h1>
@@ -167,7 +164,7 @@ const App = () => {
       {showNotification && <Notification message={notificationMessage}/>}
       <Routes>
         <Route path='/' element={<AnecdoteList anecdotes={anecdotes}/>}/>
-        <Route path='/anecdote/:id' element={<Anecdote anecdote={anecdote}/>}/>
+        <Route path='/anecdotes/:id' element={<Anecdote anecdote={anecdote}/>}/>
         <Route path='/about' element={<About/>}/>
         <Route path='/create' element={<CreateNew setNotificationMessage={setNotificationMessage} setShowNotification={setShowNotification} addNew={addNew}/>}/>
       </Routes>
